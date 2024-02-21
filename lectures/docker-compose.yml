@@ -1,0 +1,69 @@
+version: '3.7'
+services:
+  certbot:
+    image: itzg/openssl-ubuntu
+    container_name: certbot
+    working_dir: /certs
+    volumes:
+      - ./certs:/certs
+    command: ${CERT_GEN_COMMAND}
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./app/dist:/usr/share/nginx/html
+      - ./certs:/etc/ssl/certs
+    depends_on:
+      - certbot
+      - python-app
+    networks:
+      - internal
+      - external
+  python-app:
+    build: ./app_python
+    container_name: python-app
+    networks:
+      - internal
+  php:
+    image: webdevops/php-apache:7.4
+    container_name: php-app
+    volumes:
+      - ./app_php:/app
+    environment:
+      - WEB_DOCUMENT_ROOT=/app/src
+      - DB_DATABASE=${MYSQL_DATABASE}
+      - DB_USERNAME=${MYSQL_USER}
+      - DB_PASSWORD=${MYSQL_PASSWORD}
+    networks:
+      - internal
+  db:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - internal
+  net-tool1:
+    image: nicolaka/netshoot
+    container_name: net-tool1
+    command: [ "/bin/sleep", "infinity" ]
+    depends_on:
+      - python-app
+    networks:
+      - internal
+networks:
+  external:
+    driver: bridge
+  internal:
+    driver: bridge
