@@ -58,5 +58,6 @@ rtt min/avg/max/mdev = 28.337/29.971/32.943/1.767 ms
 docker build  --file 06_Dockerfile -t ubuntu-bg:v1 .
 ```
 
-5. Run nodeJS app
+5. Run nodeJS app.
+6. Multi-stage build https://vitejs.dev/guide/
 
