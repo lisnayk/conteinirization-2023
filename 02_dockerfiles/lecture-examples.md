@@ -56,8 +56,7 @@ rtt min/avg/max/mdev = 28.337/29.971/32.943/1.767 ms
 4. Keep container up
 ```shell
 docker build  --file 06_Dockerfile -t ubuntu-bg:v1 .
+```
 
 5. Run nodeJS app
-```shell
-cd /07
 
