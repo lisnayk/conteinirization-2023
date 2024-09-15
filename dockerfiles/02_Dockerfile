@@ -1,0 +1,8 @@
+FROM ubuntu:latest
+RUN apt-get update -y  \
+    && apt-get install htop -y \
+    && apt-get install nano -y  \
+    && apt-get install curl -y \
+    && apt-get install wget -y  \
+    && apt-get install git -y  \
+    && apt-get install iputils-ping -y

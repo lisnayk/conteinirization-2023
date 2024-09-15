@@ -1,0 +1,18 @@
+{
+  "name": "simple-express-app",
+  "version": "1.0.0",
+  "description": "Test nodejs app",
+  "main": "index.js",
+  "scripts": {
+    "run": "node index.js",
+    "build": "docker build --build-arg NODE_VERSION=18 -t simple-express-app .",
+    "start": "docker run -d -p 3000:3000 -e COLOR=blue simple-express-app",
+    "start1": "docker run -d -p 3001:3000 -e COLOR=red simple-express-app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}

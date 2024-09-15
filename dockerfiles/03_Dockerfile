@@ -1,0 +1,10 @@
+FROM ubuntu:latest
+LABEL maintainer="A.Lisniak" version="0.0.1" description="This is entripoint example"
+RUN apt-get update -y  \
+    && apt-get install htop -y \
+    && apt-get install nano -y  \
+    && apt-get install curl -y \
+    && apt-get install wget -y  \
+    && apt-get install git -y  \
+    && apt-get install iputils-ping -y
+ENTRYPOINT ["htop"]
