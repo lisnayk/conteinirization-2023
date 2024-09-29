@@ -6,8 +6,10 @@
   "scripts": {
     "run": "node index.js",
     "build": "docker build --build-arg NODE_VERSION=18 -t simple-express-app .",
+    "build1": "docker build --build-arg NODE_VERSION=20 -t simple-express-app .",
     "start": "docker run -d -p 3000:3000 -e COLOR=blue simple-express-app",
     "start1": "docker run -d -p 3001:3000 -e COLOR=red simple-express-app",
+    "start2`": "docker run -d -p 3002:3000 -e COLOR=green simple-express-app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
