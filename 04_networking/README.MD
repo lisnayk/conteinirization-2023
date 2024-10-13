@@ -49,7 +49,8 @@ docker run --rm -d --name my-mysql-container
       mysql:latest
       
 docker run --rm -d -p 80:80 --name my-php-container --link my-mysql-container:db --hostmame my-php-hostname my-php
-# Example 2 - bridge network and add-hos
+
+# Example 2 - bridge network and add-host. PHP and MySQL
 docker run --rm -it  --name my-php-container --add-host db:192.168.1.45 -p 8080:80 --hostname my-php-hostname my-php
 curl http://localhost:8080
 
