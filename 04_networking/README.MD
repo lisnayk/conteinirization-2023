@@ -42,6 +42,7 @@ https://hub.docker.com/r/nicolaka/netshoot
 ```shell
 # Example 1 - bridge network and link. PHP and MySQL
 docker build --tag my-php .
+
 docker run --rm -d --name my-mysql-container 
       -e MYSQL_ROOT_PASSWORD=123456 
       -e MYSQL_DATABASE=test_db
@@ -50,11 +51,10 @@ docker run --rm -d --name my-mysql-container
       
 docker run --rm -d -p 80:80 --name my-php-container --link my-mysql-container:db --hostmame my-php-hostname my-php
 
-# Example 2 - bridge network and add-host. PHP and MySQL
-docker run --rm -it  --name my-php-container --add-host db:192.168.1.45 -p 8080:80 --hostname my-php-hostname my-php
+# Example 2 - bridge network and add-h
 curl http://localhost:8080
 
-docker run --rm -it  --name my-php-container1 --add-host db:192.168.1.45 --hostname my-php-hostname1 nicolaka/netshoot /bin/bash
+cd 
 ping db
 PING db (192.168.1.45) 56(84) bytes of data.
 64 bytes from db (192.168.1.45): icmp_seq=1 ttl=62 time=1.16 ms
@@ -66,10 +66,31 @@ docker network create --driver bridge --subnet 192.168.2.0/24 --gateway 192.168.
 docker network inspect net2 
 docker run --rm -it --name net-container1 nicolaka/netshoot /bin/bash
 
-docker run --rm -it --name net-container1 nicolaka/netshoot /bin/bash
+docker run --rm -it --name net-container1 q/bin/bash
 docker run --rm -it --name net-container2 nicolaka/netshoot /bin/bash
 docker run --rm -it --name net-container2 --hostname container3 nicolaka/netshoot /bin/bash
 # ping by IP
 # ping by name
 
+# How to run php app with mysql db (host network) 
+сd <php app folder>
+
+docker build --tag my-php .
+# Run mysql container in host network
+docker run --rm -d --name my-mysql-container -e MYSQL_ROOT_PASSWORD=mysql -e MYSQL_DATABASE=test_db --network host mysql:latest
+# Run php app container in default bridge network
+docker run --rm -d -p 8080:80 --name my-php-container --add-host db:192.168.56.1 --hostname my-php-hostname my-php
+curl http://localhost:8080
+  Ping unsuccessful!
+  Connected successfully
+docker exec -it my-php-container /bin/bash
+cat /etc/hosts
+  127.0.0.1       localhost
+  ::1     localhost ip6-localhost ip6-loopback
+  fe00::0 ip6-localnet
+  ff00::0 ip6-mcastprefix
+  ff02::1 ip6-allnodes
+  ff02::2 ip6-allrouters
+  192.168.56.1    db
+  172.17.0.2      my-php-hostname
 ```
