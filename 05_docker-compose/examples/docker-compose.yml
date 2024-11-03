@@ -1,0 +1,75 @@
+version: '3.7'
+services:
+  web:
+    image: nginx:alpine
+    container_name: web-server
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./app:/usr/share/nginx/html
+      - ./certs:/etc/ssl/certs
+    depends_on:
+      - certbot
+      - mysql
+    networks:
+      - private
+      - public
+  python-app:
+    build: ./app_python
+    container_name: python-app
+#    develop:
+#      watch:
+#        - action: rebuild
+#          path: ./app_python
+    ports:
+      - "5000:5000"
+    networks:
+      - private
+  php-app:
+    image: webdevops/php-apache:7.4
+    container_name: php-app
+    ports:
+      - "8080:80"
+    volumes:
+      - ./app_php:/app
+    environment:
+      - WEB_DOCUMENT_ROOT=/app/src
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_PASSWORD=/run/secrets/mysql_password
+    networks:
+      - private
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:latest
+    container_name: mysql-server
+#    ports:
+#      - "3312:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: /run/secrets/mysql_password
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-test}
+    volumes:
+      - mysql-store:/var/lib/mysql
+    networks:
+      - private
+  certbot:
+    image: itzg/openssl-ubuntu
+    container_name: certbot
+    working_dir: /certs
+    volumes:
+      - ./certs:/certs
+    command: ${CERT_GEN_COMMAND}
+volumes:
+  mysql-store:
+    driver: local
+networks:
+  public:
+    driver: bridge
+  private:
+    driver: bridge
+secrets:
+    mysql_password:
+        file: ./secrets/mysql_password.txt
+
