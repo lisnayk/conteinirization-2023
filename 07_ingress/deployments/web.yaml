@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-server-deployment
+  labels:
+    app: web-server
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: wev-server
+  template:
+    metadata:
+      labels:
+        app: wev-server
+    spec:
+      containers:
+        - name: wev-server
+          image: nginx
+          ports:
+            - containerPort: 80

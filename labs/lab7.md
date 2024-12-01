@@ -138,3 +138,5 @@ Minikube - інструмент, який дозволяє запустити Ku
 - https://www.slideshare.net/slideshow/kubernetes-architecture-understanding-kubernetes-components-kubernetes-tutorial-edureka/121271047
 - https://kodekloud.com/pages/free-labs/kubernetes/
 - https://kubernetes.io/uk/docs/concepts/overview/what-is-kubernetes/
+- https://habr.com/ru/companies/vk/articles/543232/
+- https://timeweb.cloud/blog/sistemy-orkestracii-kontejnerov
